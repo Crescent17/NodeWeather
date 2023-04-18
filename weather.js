@@ -10,7 +10,8 @@ weather.listen(port, function () {
     console.log(`The server is started on port ${port}`)
 })
 
-weather.get("/", function () {
+weather.get("/", function (req, res) {
+
     const url = `https://api.openweathermap.org/data/2.5/weather?q=Minsk&units=metric&appid=${apiKey}`
     https.get(url, response => {
         response.on("data", data => {
@@ -18,7 +19,11 @@ weather.get("/", function () {
             const description = weatherInfo.weather[0].description
             const temperature = weatherInfo.main.temp;
             const city = weatherInfo.name
-            console.log(`${city}: ${description}, ${temperature} degrees`)
+            const icon = weatherInfo.weather[0].icon
+            const imgUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`
+            res.write(`<h1>${city}: ${description}, ${temperature} degrees</h1>`)
+            res.write(`<img src=${imgUrl} alt="weather-img"/>`)
+            res.send
         })
     })
 })
