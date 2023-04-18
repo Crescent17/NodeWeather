@@ -1,5 +1,7 @@
 const express = require("express")
 const https = require("https")
+require("dotenv").config()
+const apiKey = process.env.API_KEY
 const weather = express()
 const port = 3000
 
@@ -8,8 +10,8 @@ weather.listen(port, function () {
     console.log(`The server is started on port ${port}`)
 })
 
-weather.get("/", function (req, res) {
-    const url = "https://api.openweathermap.org/data/2.5/weather?q=Minsk&units=metric&appid=3a245d1f250b7f01dfccc5333f1ebb12"
+weather.get("/", function () {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=Minsk&units=metric&appid=${apiKey}`
     https.get(url, response => {
         response.on("data", data => {
             const weatherInfo = JSON.parse(data);
